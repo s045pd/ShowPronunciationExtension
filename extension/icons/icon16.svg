@@ -1,0 +1,8 @@
+<svg width="16" height="16" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="64" cy="64" r="60" fill="#4285f4" />
+    <g fill="white" opacity="0.9">
+        <path d="M64 32v64M52 44v40M76 44v40" stroke="white" stroke-width="8" stroke-linecap="round" />
+        <g font-family="Arial, sans-serif" font-size="16" font-weight="bold"></g>
+    </g>
+    <circle cx="64" cy="64" r="58" fill="none" stroke="white" stroke-width="2" opacity="0.5" />
+</svg>

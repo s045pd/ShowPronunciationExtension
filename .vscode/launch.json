@@ -1,0 +1,20 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Chrome Extension",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://ccdb.hemiola.com/", // 你想要测试的网页
+            "runtimeArgs": [
+                "--load-extension=${workspaceFolder}/extension", // 你的扩展目录
+                "--disable-extensions-except=${workspaceFolder}/extension",
+                "--remote-debugging-port=9222"
+            ],
+            "sourceMaps": true
+        }
+    ]
+}

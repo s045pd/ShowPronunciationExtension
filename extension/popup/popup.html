@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      width: 250px;
+      padding: 10px;
+    }
+    .settings {
+      margin-bottom: 10px;
+    }
+    button {
+      width: 100%;
+      margin: 5px 0;
+      padding: 5px;
+    }
+    .language-option {
+      margin: 5px 0;
+    }
+    .accent-options {
+      margin-left: 20px;
+      display: none;
+    }
+    #english:checked ~ .accent-options {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="settings">
+    <div class="language-option">
+      <input type="checkbox" id="english" checked>
+      <label for="english">English</label>
+      <div class="accent-options">
+        <input type="radio" id="us_accent" name="english_accent" value="us" checked>
+        <label for="us_accent">US English</label>
+        <br>
+        <input type="radio" id="uk_accent" name="english_accent" value="uk">
+        <label for="uk_accent">UK English</label>
+      </div>
+    </div>
+    <div class="language-option">
+      <input type="checkbox" id="japanese" checked>
+      <label for="japanese">日本語 (Japanese)</label>
+    </div>
+    <div class="language-option">
+      <input type="checkbox" id="korean" checked>
+      <label for="korean">한국어 (Korean)</label>
+    </div>
+    <div class="selection-settings">
+      <h3>划词设置</h3>
+      <div>
+        <input type="checkbox" id="enableSelection" checked>
+        <label for="enableSelection">启用划词音标</label>
+      </div>
+      <div class="modifier-options">
+        <input type="radio" id="ctrl_key" name="modifier_key" value="ctrl" checked>
+        <label for="ctrl_key">Ctrl + 划词</label>
+        <br>
+        <input type="radio" id="shift_key" name="modifier_key" value="shift">
+        <label for="shift_key">Shift + 划词</label>
+      </div>
+    </div>
+  </div>
+  <button id="addPronunciation">添加发音提示</button>
+  <script src="popup.js"></script>
+</body>
+</html> 

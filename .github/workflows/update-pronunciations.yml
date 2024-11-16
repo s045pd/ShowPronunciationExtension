@@ -1,0 +1,56 @@
+name: Update Pronunciations
+
+on:
+  issues:
+    types: [opened, edited]
+  workflow_dispatch:
+    inputs:
+      language:
+        description: "Target language (english/japanese/korean)"
+        required: true
+        default: "english"
+      source:
+        description: "Dictionary source"
+        required: true
+        default: "cambridge"
+
+jobs:
+  process-missing-words:
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'missing-pronunciation')
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install aiohttp beautifulsoup4 tqdm
+
+      - name: Extract missing words
+        run: |
+          python scripts/gather/extract_words.py "${{ github.event.issue.body }}"
+
+      - name: Update pronunciations
+        run: |
+          python scripts/gather/update_pronunciations.py
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "Update pronunciation data"
+          title: "Update pronunciation data from issue #${{ github.event.issue.number }}"
+          body: |
+            Updates pronunciation data based on issue #${{ github.event.issue.number }}
+
+            - Processed missing words
+            - Updated pronunciation database
+          branch: update-pronunciations
+          base: main

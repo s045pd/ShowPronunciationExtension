@@ -1,0 +1,50 @@
+.pronunciation-helper {
+    position: relative;
+    display: inline-block;
+}
+
+.pronunciation-helper:hover::after {
+    content: attr(data-pronunciation);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+}
+
+.pronunciation-audio-button {
+    display: inline-block;
+    margin-left: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+    vertical-align: middle;
+}
+
+.pronunciation-audio-button:hover {
+    color: #4CAF50;
+}
+
+/* 英语发音特殊样式 */
+.pronunciation-helper[data-language="english"]:hover::after {
+    background: #9b59b6;
+}
+
+/* 其他语言样式 */
+.pronunciation-helper[data-language="chinese"]:hover::after {
+    background: #e74c3c;
+}
+
+.pronunciation-helper[data-language="japanese"]:hover::after {
+    background: #3498db;
+}
+
+.pronunciation-helper[data-language="korean"]:hover::after {
+    background: #2ecc71;
+} 

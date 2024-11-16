@@ -1,0 +1,37 @@
+name: Release Pronunciation Data
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "data/**"
+  workflow_dispatch:
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Generate release files
+        run: |
+          python scripts/gather/generate_release.py
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            release/*.json
+          tag_name: v${{ github.run_number }}
+          name: Pronunciation Data v${{ github.run_number }}
+          body_path: release/CHANGELOG.md
+          draft: false
+          prerelease: false
