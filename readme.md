@@ -1,3 +1,5 @@
+> Our goal: Make you sound like a native, Even further.
+
 # Multi-language Pronunciation Helper
 
 A Chrome extension that provides pronunciation guides for multiple languages including English, Chinese, Japanese, and Korean.

@@ -15,13 +15,15 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content/content.js"],
+      "js": [
+
+        "content/content.js"
+      ],
       "css": ["content/styles.css"]
     }
   ],
   "web_accessible_resources": [{
     "resources": [
-      "data/index.json",
       "data/en/uk.json",
       "data/en/us.json",
       "data/ja/pronunciations.json",

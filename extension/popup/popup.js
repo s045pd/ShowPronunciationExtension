@@ -19,7 +19,8 @@ function getSettings() {
         accent: {
             english: {
                 us: document.getElementById('us_accent')?.checked || true,
-                uk: document.getElementById('uk_accent')?.checked || false
+                uk: document.getElementById('uk_accent')?.checked || false,
+                enablePhoneticColor: document.getElementById('enablePhoneticColor')?.checked || true
             },
             japanese: {
                 standard: true
