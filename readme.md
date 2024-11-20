@@ -50,6 +50,8 @@
 4. 或者选择任意文本查看其发音
 
 ## 项目结构
+
+```bash
 .github/ # GitHub Actions配置
 ├── workflows/ # 工作流配置
 ├── scripts/ # 自动脚本目录
@@ -70,6 +72,8 @@ scripts/ # 工具脚本
 tests/ # 测试目录
 ├── extension/ # 扩展测试
 └── scripts/ # 脚本测试
+
+```
 
 
 
