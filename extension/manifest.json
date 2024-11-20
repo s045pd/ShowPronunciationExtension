@@ -6,17 +6,25 @@
   "permissions": [
     "activeTab",
     "scripting",
-    "storage"
+    "storage",
+    "tabs"
   ],
   "action": {
     "default_popup": "popup/popup.html"
   },
-
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
       "js": [
-
+        "content/modules/settings.js",
+        "data/en/uk_pron.js",
+        "data/en/us_pron.js",
+        "content/modules/languageDetector.js",
+        "content/modules/pronunciationService.js",
+        "content/modules/domHandler.js",
+        "content/modules/textProcessor.js",
+        "content/modules/eventHandlers.js",
+        "content/modules/styles.js",
         "content/content.js"
       ],
       "css": ["content/styles.css"]
@@ -26,8 +34,8 @@
     "resources": [
       "data/en/uk.json",
       "data/en/us.json",
-      "data/ja/pronunciations.json",
-      "data/ko/pronunciations.json"
+      "data/ja/ipa.json",
+      "data/ko/ipa.json"
     ],
     "matches": ["<all_urls>"]
   }]

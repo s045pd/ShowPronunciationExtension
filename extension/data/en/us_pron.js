@@ -1,94 +1,95 @@
-const long_vowel = {
+const us_vowelColor = "#FFA07A";  // 基础色调（不使用）
+
+const us_consonantColor = "#4A90E2";  // 深蓝色基调
+
+const us_long_vowel = {
     "type": "long_vowel",
-    "color": "#FF6B6B",
-    "description": "long ee as in 'fleece'"
+    "color": "#800080",  // 紫色
+    "description": "long vowel"
 }
 
-const short_vowel = {
+const us_short_vowel = {
     "type": "short_vowel", 
-    "color": "#FF6B6B",
-    "description": "short i as in 'kit'"
+    "color": "#FFA500",  // 橙色
+    "description": "short vowel"
 }
 
-const neutral_vowel = {
+const us_neutral_vowel = {
     "type": "neutral_vowel",
-    "color": "#D4D4D4", 
-    "description": "schwa as in 'comma'"
+    "color": "#FF0000",  // 红色
+    "description": "neutral vowel"
 }
 
-const voiced_constant = {
+const us_voiced_constant = {
     "type": "voiced_constant",
-    "color": "#FF9F9F",
-    "description": "v as in 'vase'"
+    "color": "#FFFFFF",  // 白色字体
+    "backgroundColor": "#4169E1",  // 皇家蓝背景
+    "description": "voiced consonant"
 }
 
-const unvoiced_constant = {
+const us_unvoiced_constant = {
     "type": "unvoiced_constant",
-    "color": "#FF9F9F", 
-    "description": "f as in 'fan'"
+    "color": "#4169E1",  // 皇家蓝
+    "description": "unvoiced consonant"
 }
 
-const diphthong = {
+const us_diphthong = {
     "type": "diphthong",
-    "color": "#FFB6C1",
-    "description": "two vowel sounds combined"
+    "color": "#222222",  // 雅黑色
+    "description": "diphthong"
 }
 
-const vowel = {
-    "ɪ": short_vowel,
-    "i": long_vowel,     // 美式通常使用 i 而不是 iː
-    "ʊ": short_vowel,
-    "u": long_vowel,     // 美式通常使用 u 而不是 uː
-    "ɛ": short_vowel,    // 美式使用 ɛ 而不是 e
-    "ə": neutral_vowel,
-    "ɝ": long_vowel,     // 美式重读的 r 化元音
-    "ɚ": neutral_vowel,  // 美式轻读的 r 化元音
-    "ɔ": long_vowel,     // 美式通常使用 ɔ 而不是 ɔː
-    "æ": short_vowel,
-    "ʌ": short_vowel,
-    "ɑ": long_vowel,     // 美式通常使用 ɑ 而不是 ɑː
-    "e": diphthong,
-    "aɪ": diphthong,
-    "ɔɪ": diphthong,
-    "oʊ": diphthong,     // 美式使用 oʊ 而不是 əʊ
-    "aʊ": diphthong,
-    "ɪr": diphthong,     // 美式使用 ɪr 而不是 ɪə
-    "ɛr": diphthong,     // 美式使用 ɛr 而不是 eə
-    "ʊr": diphthong      // 美式使用 ʊr 而不是 ʊə
+const us_vowel = {
+    "ɪ": us_short_vowel,
+    "i": us_long_vowel,     // 美式通常使用 i 而不是 iː
+    "ʊ": us_short_vowel,
+    "u": us_long_vowel,     // 美式通常使用 u 而不是 uː
+    "ɛ": us_short_vowel,    // 美式使用 ɛ 而不是 e
+    "ə": us_neutral_vowel,
+    "ɝ": us_long_vowel,     // 美式重读的 r 化元音
+    "ɚ": us_neutral_vowel,  // 美式轻读的 r 化元音
+    "ɔ": us_long_vowel,     // 美式通常使用 ɔ 而不是 ɔː
+    "æ": us_short_vowel,
+    "ʌ": us_short_vowel,
+    "ɑ": us_long_vowel,     // 美式通常使用 ɑ 而不是 ɑː
+    "e": us_diphthong,
+    "aɪ": us_diphthong,
+    "ɔɪ": us_diphthong,
+    "oʊ": us_diphthong,     // 美式使用 oʊ 而不是 əʊ
+    "aʊ": us_diphthong,
+    "ɪr": us_diphthong,     // 美式使用 ɪr 而不是 ɪə
+    "ɛr": us_diphthong,     // 美式使用 ɛr 而不是 eə
+    "ʊr": us_diphthong      // 美式使用 ʊr 而不是 ʊə
 }
 
-const constant = {
-    "p": unvoiced_constant,
-    "b": voiced_constant,
-    "t": unvoiced_constant,
-    "d": voiced_constant,
-    "k": unvoiced_constant,
-    "g": voiced_constant,
-    "f": unvoiced_constant,
-    "v": voiced_constant,
-    "θ": unvoiced_constant,
-    "ð": voiced_constant,
-    "s": unvoiced_constant,
-    "z": voiced_constant,
-    "ʃ": unvoiced_constant,
-    "ʒ": voiced_constant,
-    "h": unvoiced_constant,
-    "m": voiced_constant,
-    "n": voiced_constant,
-    "ŋ": voiced_constant,
-    "l": voiced_constant,
-    "r": voiced_constant,
-    "j": voiced_constant,
-    "w": voiced_constant,
-    "tʃ": unvoiced_constant,  // 美式通常使用 tʃ 而不是 ʧ
-    "dʒ": voiced_constant     // 美式通常使用 dʒ 而不是 ʤ
+const us_constant = {
+    "p": us_unvoiced_constant,
+    "b": us_voiced_constant,
+    "t": us_unvoiced_constant,
+    "d": us_voiced_constant,
+    "k": us_unvoiced_constant,
+    "g": us_voiced_constant,
+    "f": us_unvoiced_constant,
+    "v": us_voiced_constant,
+    "θ": us_unvoiced_constant,
+    "ð": us_voiced_constant,
+    "s": us_unvoiced_constant,
+    "z": us_voiced_constant,
+    "ʃ": us_unvoiced_constant,
+    "ʒ": us_voiced_constant,
+    "h": us_unvoiced_constant,
+    "m": us_voiced_constant,
+    "n": us_voiced_constant,
+    "ŋ": us_voiced_constant,
+    "l": us_voiced_constant,
+    "r": us_voiced_constant,
+    "j": us_voiced_constant,
+    "w": us_voiced_constant,
+    "tʃ": us_unvoiced_constant,  // 美式通常使用 tʃ 而不是 ʧ
+    "dʒ": us_voiced_constant     // 美式通常使用 dʒ 而不是 ʤ
 }
 
-
-
-const dataMap = {
-    vowel,
-    constant
+const us_dataMap = {
+    us_vowel,
+    us_constant
 }
-
-export { dataMap };

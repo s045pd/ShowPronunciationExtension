@@ -1,37 +1,46 @@
+// 元音基础颜色 - 使用不同颜色区分类型
+const vowelColor = "#FFA07A";  // 基础色调（不使用）
+
+// 辅音基础颜色 - 使用蓝色系
+const consonantColor = "#4A90E2";  // 深蓝色基调
+
+// 元音类型定义
 const long_vowel = {
     "type": "long_vowel", 
-    "color": "#FF6B6B",
-    "description": "long ee as in 'fleece'"
+    "color": "#800080",  // 紫色
+    "description": "long vowel"
 }
 
 const short_vowel = {
     "type": "short_vowel",
-    "color": "#FF6B6B", 
-    "description": "short i as in 'kit'"
+    "color": "#FFA500",  // 橙色
+    "description": "short vowel"
 }
 
 const neutral_vowel = {
     "type": "neutral_vowel",
-    "color": "#D4D4D4",
-    "description": "schwa as in 'comma'"
+    "color": "#FF0000",  // 红色
+    "description": "neutral vowel"
 }
 
+// 辅音类型定义
 const voiced_constant = {
     "type": "voiced_constant",
-    "color": "#FF9F9F",
-    "description": "v as in 'vase'"
+    "color": "#FFFFFF",  // 白色字体
+    "backgroundColor": "#4169E1",  // 皇家蓝背景
+    "description": "voiced consonant"
 }
 
 const unvoiced_constant = {
     "type": "unvoiced_constant", 
-    "color": "#FF9F9F",
-    "description": "f as in 'fan'"
+    "color": "#4169E1",  // 皇家蓝
+    "description": "unvoiced consonant"
 }
 
 const diphthong = {
     "type": "diphthong",
-    "color": "#FFB6C1",
-    "description": "two vowel sounds combined"
+    "color": "#222222",  // 雅黑色
+    "description": "diphthong"
 }
 
 const vowel = {
@@ -82,12 +91,3 @@ const constant = {
     "ʧ": unvoiced_constant,
     "ʤ": voiced_constant
 }
-
-
-
-const dataMap = {
-    vowel,
-    constant,
-}
-
-export { dataMap };

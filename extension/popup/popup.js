@@ -130,4 +130,34 @@ document.getElementById('english')?.addEventListener('change', function() {
 });
 
 // 页面加载时恢复设置
-document.addEventListener('DOMContentLoaded', loadSettings); 
+document.addEventListener('DOMContentLoaded', loadSettings);
+
+// 初始化设置
+document.addEventListener('DOMContentLoaded', async () => {
+    // 从 storage 获取当前设置
+    const settings = await chrome.storage.sync.get('settings');
+    const currentSettings = settings.settings || { enablePhoneticColor: true };
+    
+    // 设置复选框状态
+    document.getElementById('enablePhoneticColor').checked = currentSettings.enablePhoneticColor;
+});
+
+// 监听设置变化
+document.getElementById('enablePhoneticColor').addEventListener('change', async (e) => {
+    const enablePhoneticColor = e.target.checked;
+    
+    // 更新存储的设置
+    const settings = await chrome.storage.sync.get('settings');
+    const currentSettings = settings.settings || {};
+    currentSettings.enablePhoneticColor = enablePhoneticColor;
+    await chrome.storage.sync.set({ settings: currentSettings });
+    
+    // 向当前标签页发送更新消息
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+            action: 'updatePhoneticColor',
+            enablePhoneticColor
+        });
+    }
+}); 
