@@ -1,5 +1,5 @@
 aiohttp==3.8.5
 beautifulsoup4==4.12.2
-tqdm==4.65.0
+tqdm==4.66.3
 pykakasi==2.2.1
 hangul-romanize==0.1.0
