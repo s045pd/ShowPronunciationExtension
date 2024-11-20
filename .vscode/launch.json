@@ -8,7 +8,7 @@
             "name": "English Test",
             "type": "chrome",
             "request": "launch",
-            "url": "https://en.wikipedia.org/wiki/Wikipedia:About", 
+            "url": "http://ccdb.hemiola.com/", 
             "runtimeArgs": [
                 "--load-extension=${workspaceFolder}/extension",
                 "--disable-extensions-except=${workspaceFolder}/extension",

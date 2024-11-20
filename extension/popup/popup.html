@@ -25,9 +25,29 @@
     #english:checked ~ .accent-options {
       display: block;
     }
+    .ad-container {
+      margin-top: 1px;
+      padding: 1px;
+      border: 1px solid #eee;
+      border-radius: 0.2px;
+      max-height: 0px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      visibility: hidden;
+    }
+    .ad-label {
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+      margin-bottom: 4px;
+    }
   </style>
 </head>
 <body>
+  <div id="adContainer" class="ad-container">
+    <!-- Ad content will be inserted here -->
+  </div>
   <div class="settings">
     <div class="language-option">
       <input type="checkbox" id="english" checked>
@@ -61,6 +81,8 @@
     </div>
   </div>
   <button id="addPronunciation">添加发音提示</button>
+
+
   <script src="popup.js"></script>
 </body>
 </html> 

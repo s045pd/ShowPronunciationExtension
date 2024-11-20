@@ -23,8 +23,13 @@
         "content/modules/pronunciationService.js",
         "content/modules/domHandler.js",
         "content/modules/textProcessor.js",
-        "content/modules/eventHandlers.js",
-        "content/modules/styles.js",
+        "content/modules/listener.js",
+        "content/modules/valid.js",
+        "content/modules/events/onCommon.js",
+        "content/modules/events/onAccentChange.js",
+        "content/modules/events/onLanguageChange.js",
+        "content/modules/events/onSelect.js",
+        "content/modules/events/onHover.js",
         "content/content.js"
       ],
       "css": ["content/styles.css"]
@@ -37,5 +42,8 @@
       "data/ko/ipa.json"
     ],
     "matches": ["<all_urls>"]
-  }]
+  }],
+  "host_permissions": [
+    "https://www.google-analytics.com/*"
+  ]
 }

@@ -4,9 +4,6 @@ async function initialize() {
         // 加载发音数据
         await pronunciationService.loadPronunciationData();
         
-        // 注入样式
-        injectStyles();
-        
         // 初始化事件监听
         if (typeof initializeEventListeners === 'function') {
             initializeEventListeners();

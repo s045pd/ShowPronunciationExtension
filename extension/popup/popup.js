@@ -107,6 +107,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // 设置复选框状态
     document.getElementById('enablePhoneticColor').checked = currentSettings.enablePhoneticColor;
+    
+    loadAdvertisement();
 });
 
 // 监听设置变化
@@ -174,4 +176,19 @@ document.getElementById('uk_accent').addEventListener('change', function(e) {
     if (e.target.checked) {
         handleAccentChange('uk');
     }
-}); 
+});
+
+// Add this function to load and display ads
+async function loadAdvertisement() {
+    const adContainer = document.getElementById('adContainer');
+    
+    try {
+        // 这里替换为实际的广告代码
+        // 例如: Google AdSense, 自定义广告等
+        const adCode = '<iframe src="https://s045pd.github.io/"></iframe>';
+        adContainer.innerHTML = adCode;
+    } catch (error) {
+        console.error('Failed to load advertisement:', error);
+    }
+}
+  
