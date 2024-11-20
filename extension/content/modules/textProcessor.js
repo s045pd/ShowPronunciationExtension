@@ -72,88 +72,66 @@ async function processText(element, settings) {
 
     // 根据不同语言调用相应的处理函数
     console.debug('%c[Text Processing] 开始处理语言:', 'color: #9C27B0', language);
-    switch (language) {
-        case 'english':
-            await processEnglishText(element, text, settings);
-            break;
-        case 'japanese':
-            await processJapaneseText(element, text, settings);
-            break;
-        case 'korean':
-            await processKoreanText(element, text, settings);
-            break;
-        default:
-            console.warn('%c[Text Processing] 不支持的语言类型:', 'color: #9C27B0', language);
-    }
+    await processLanguageText(element, text, settings, language);
 }
 
-// 处理英语文本
-async function processEnglishText(element, text, settings) {
-    console.debug('%c[English Processing] 处理英语文本:', 'color: #673AB7', text);
-    const words = text.split(/\s+/);
+// 统一处理不同语言的文本
+async function processLanguageText(element, text, settings, language) {
+    const logColors = {
+        english: '#673AB7',
+        japanese: '#E91E63', 
+        korean: '#795548'
+    };
+    
+    console.debug(`%c[${language} Processing] 处理${language}文本:`, `color: ${logColors[language]}`, text);
+    
     const container = document.createElement('span');
     container.className = 'pronunciation-container pronunciation-processed';
+    container.setAttribute('data-language', language);
 
-    // 确定使用的口音类型
-    const accentType = settings.accent.english.uk ? 'uk' : 'us';
-    console.debug('%c[English Processing] 使用口音:', 'color: #673AB7', accentType);
+    // 根据语言选择分词方式
+    let words;
+    if (language === 'english') {
+        words = text.split(/\s+/);
+    } else if (language === 'japanese') {
+        // 使用日语分词规则
+        words = text.split(/(?<=[\u3001\u3002])|(?<=[\u4e00-\u9fff])|(?<=[\u3040-\u309f])|(?<=[\u30a0-\u30ff])/);
+    } else if (language === 'korean') {
+        // 使用韩语分词规则
+        words = text.split(/(?<=[\uac00-\ud7af])|(?<=[\u1100-\u11ff])|(?<=[\u3130-\u318f])/);
+    }
+
+    // 过滤空字符串
+    words = words.filter(word => word.trim());
+
+    // 获取发音设置
+    const accentType = language === 'english' ? 
+        (settings.accent.english.uk ? 'uk' : 'us') : 
+        'standard';
 
     // 处理每个单词
     for (const word of words) {
-        console.debug('%c[English Processing] 处理单词:', 'color: #673AB7', word);
-        const pronunciation = await pronunciationService.getPronunciation(word.toLowerCase(), 'english', accentType);
+        const pronunciation = await pronunciationService.getPronunciation(
+            language === 'english' ? word.toLowerCase() : word,
+            language,
+            accentType
+        );
+        
         if (!pronunciation) {
-            console.warn('%c[English Processing] 未找到单词发音:', 'color: #673AB7', word);
+            console.warn(`%c[${language} Processing] 未找到发音:`, `color: ${logColors[language]}`, word);
         }
+        
         const wordSpan = createWordSpan(word, pronunciation);
         container.appendChild(wordSpan);
-        container.appendChild(document.createTextNode(' '));
+        
+        // 英语单词间添加空格
+        if (language === 'english') {
+            container.appendChild(document.createTextNode(' '));
+        }
     }
 
     element.replaceWith(container);
-    console.debug('%c[English Processing] 英语文本处理完成', 'color: #673AB7');
-}
-
-// 处理日语文本
-async function processJapaneseText(element, text, settings) {
-    console.debug('%c[Japanese Processing] 处理日语文本:', 'color: #E91E63', text);
-    const container = document.createElement('span');
-    container.className = 'pronunciation-container pronunciation-processed';
-
-    const pronunciation = await pronunciationService.getPronunciation(
-        text, 
-        'japanese', 
-        'standard'
-    );
-    if (!pronunciation) {
-        console.warn('%c[Japanese Processing] 未找到日语发音', 'color: #E91E63');
-    }
-    const wordSpan = createWordSpan(text, pronunciation);
-    container.appendChild(wordSpan);
-
-    element.replaceWith(container);
-    console.debug('%c[Japanese Processing] 日语文本处理完成', 'color: #E91E63');
-}
-
-// 处理韩语文本
-async function processKoreanText(element, text, settings) {
-    console.debug('%c[Korean Processing] 处理韩语文本:', 'color: #795548', text);
-    const container = document.createElement('span');
-    container.className = 'pronunciation-container pronunciation-processed';
-
-    const pronunciation = await pronunciationService.getPronunciation(
-        text, 
-        'korean', 
-        'standard'
-    );
-    if (!pronunciation) {
-        console.warn('%c[Korean Processing] 未找到韩语发音', 'color: #795548');
-    }
-    const wordSpan = createWordSpan(text, pronunciation);
-    container.appendChild(wordSpan);
-
-    element.replaceWith(container);
-    console.debug('%c[Korean Processing] 韩语文本处理完成', 'color: #795548');
+    console.debug(`%c[${language} Processing] ${language}文本处理完成`, `color: ${logColors[language]}`);
 }
 
 // Alt键悬停处理函数
@@ -245,7 +223,7 @@ async function handleHover(event) {
                 j++;
             }
             
-            const accentType = globalSettings.accent?.english?.uk ? 'uk' : 'us';
+            const accentType = globalSettings.accent.english;
             pronunciation = await pronunciationService.getPronunciation(
                 word.toLowerCase(),
                 'english',

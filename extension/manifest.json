@@ -32,8 +32,7 @@
   ],
   "web_accessible_resources": [{
     "resources": [
-      "data/en/uk.json",
-      "data/en/us.json",
+      "data/en/data.json",
       "data/ja/ipa.json",
       "data/ko/ipa.json"
     ],

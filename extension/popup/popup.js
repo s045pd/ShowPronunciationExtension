@@ -17,21 +17,12 @@ function getSettings() {
             korean: document.getElementById('korean')?.checked || false
         },
         accent: {
-            english: {
-                us: document.getElementById('us_accent')?.checked || true,
-                uk: document.getElementById('uk_accent')?.checked || false,
-                enablePhoneticColor: document.getElementById('enablePhoneticColor')?.checked || true
-            },
-            japanese: {
-                standard: true
-            },
-            korean: {
-                standard: true
-            }
+            english: document.querySelector('input[name="english_accent"]:checked')?.value || 'us',
+            japanese: 'standard',
+            korean: 'standard'
         },
         selection: {
             enabled: document.getElementById('enableSelection')?.checked || false,
-            modifierKey: document.querySelector('input[name="modifier_key"]:checked')?.value || 'ctrl'
         }
     };
 }
@@ -51,20 +42,12 @@ function loadSettings() {
             korean: true
         },
         accent: {
-            english: {
-                us: true,
-                uk: false
-            },
-            japanese: {
-                standard: true
-            },
-            korean: {
-                standard: true
-            }
+            english: 'us',
+            japanese: 'standard',
+            korean: 'standard'
         },
         selection: {
             enabled: true,
-            modifierKey: 'ctrl'
         }
     };
 
@@ -73,44 +56,28 @@ function loadSettings() {
             const settings = data.pronunciationSettings || defaultSettings;
             
             // 设置语言启用状态
-            const languageElements = {
-                english: document.getElementById('english'),
-                japanese: document.getElementById('japanese'),
-                korean: document.getElementById('korean')
-            };
-
-            // 安全地设置复选框状态
-            Object.entries(languageElements).forEach(([lang, element]) => {
-                if (element && settings.enabledLanguages?.[lang] !== undefined) {
-                    element.checked = settings.enabledLanguages[lang];
+            Object.entries(settings.enabledLanguages).forEach(([lang, enabled]) => {
+                const element = document.getElementById(lang);
+                if (element) {
+                    element.checked = enabled;
                 }
             });
             
             // 设置口音选项
-            const accentElements = {
-                us: document.getElementById('us_accent'),
-                uk: document.getElementById('uk_accent')
-            };
-
-            // 安全地设置单选按钮状态
-            if (settings.accent?.english) {
-                Object.entries(accentElements).forEach(([accent, element]) => {
-                    if (element && settings.accent.english[accent] !== undefined) {
-                        element.checked = settings.accent.english[accent];
-                    }
-                });
+            const accentElement = document.getElementById(`${settings.accent.english}_accent`);
+            if (accentElement) {
+                accentElement.checked = true;
             }
 
             // 更新口音选项的显示状态
             const accentOptions = document.querySelector('.accent-options');
             if (accentOptions) {
                 accentOptions.style.display = 
-                    settings.enabledLanguages?.english ? 'block' : 'none';
+                    settings.enabledLanguages.english ? 'block' : 'none';
             }
 
         } catch (error) {
             console.error('Error loading settings:', error);
-            // 如果出错，使用默认设置
             chrome.storage.sync.set({ pronunciationSettings: defaultSettings });
         }
     });
@@ -159,5 +126,52 @@ document.getElementById('enablePhoneticColor').addEventListener('change', async 
             action: 'updatePhoneticColor',
             enablePhoneticColor
         });
+    }
+});
+
+// 更新语言启用状态的处理函数
+function handleLanguageToggle(languageId, enabled) {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+            action: 'toggleLanguage',
+            language: languageId,
+            enabled: enabled
+        });
+    });
+}
+
+// 更新英语口音的处理函数
+function handleAccentChange(accentType) {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+            action: 'updateAccent',
+            accentType: accentType
+        });
+    });
+}
+
+// 添加语言切换事件监听
+document.getElementById('english').addEventListener('change', function(e) {
+    handleLanguageToggle('english', e.target.checked);
+});
+
+document.getElementById('japanese').addEventListener('change', function(e) {
+    handleLanguageToggle('japanese', e.target.checked);
+});
+
+document.getElementById('korean').addEventListener('change', function(e) {
+    handleLanguageToggle('korean', e.target.checked);
+});
+
+// 添加口音切换事件监听
+document.getElementById('us_accent').addEventListener('change', function(e) {
+    if (e.target.checked) {
+        handleAccentChange('us');
+    }
+});
+
+document.getElementById('uk_accent').addEventListener('change', function(e) {
+    if (e.target.checked) {
+        handleAccentChange('uk');
     }
 }); 
