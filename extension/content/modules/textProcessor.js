@@ -36,47 +36,55 @@ async function tryExpandWord(word, element, isFirst) {
     return extendedWord;
 }
 
+
+
+// 扩展英文选择范围
+async function expandEnglishSelection(range, selectedText) {
+    console.debug('%c[Selection] 处理英文选中文本', 'color: #009688');
+    const words = selectedText.split(/[\s\p{P}]+/u).filter(word => word.length > 0);
+    
+    if (words.length > 0) {
+        const firstWord = words[0];
+        const lastWord = words[words.length - 1];
+        
+        // 扩展首尾单词
+        const expandedFirstWord = await tryExpandWord(firstWord, range.startContainer, true);
+        const expandedLastWord = await tryExpandWord(lastWord, range.endContainer, false);
+
+
+        // 更新range的起始和结束位置
+        if (expandedFirstWord !== firstWord) {
+            console.debug('%c[Selection] 更新首单词:', 'color: #009688', expandedFirstWord);
+            const startOffset = range.startContainer.textContent.indexOf(expandedFirstWord);
+            range.setStart(range.startContainer, startOffset);
+        }
+        
+        if (expandedLastWord !== lastWord) {
+            console.debug('%c[Selection] 更新尾单词:', 'color: #009688', expandedLastWord);
+            const endOffset = range.endContainer.textContent.indexOf(expandedLastWord) + expandedLastWord.length;
+            range.setEnd(range.endContainer, endOffset);
+        }
+    }
+}
+
+
+
 // 处理文本的主函数
-async function processText(element, settings) {
+async function processText(element,language) {
     console.debug('%c[Text Processing] 处理文本元素:', 'color: #9C27B0', element);
-    // 检查元素是否已处理过或是否是发音提示元素
-    if (element.classList.contains('pronunciation-processed')) {
-        console.debug('%c[Text Processing] 元素已处理过，跳过', 'color: #9C27B0');
-        return;
-    }
-    if (element.classList.contains('pronunciation-tooltip')) {
-        console.debug('%c[Text Processing] 元素是发音提示，跳过', 'color: #9C27B0');
-        return;
-    }
-    if (element.classList.contains('word-text')) {
-        console.debug('%c[Text Processing] 元素是单词文本，跳过', 'color: #9C27B0');
-        return;
-    }
-
-    const text = element.textContent.trim();
-    if (!text) {
-        console.debug('%c[Text Processing] 文本为空，跳过', 'color: #9C27B0');
-        return;
-    }
-
-    // 检测文本语言并验证是否启用该语言
-    const language = detectLanguage(text);
-    if (!language) {
-        console.warn('%c[Text Processing] 未检测到语言，跳过', 'color: #9C27B0');
-        return;
-    }
-    if (!settings.enabledLanguages[language]) {
+  
+    if (!globalSettings.enabledLanguages[language]) {
         console.warn('%c[Text Processing] 语言未启用:', 'color: #9C27B0', language);
         return;
     }
 
     // 根据不同语言调用相应的处理函数
     console.debug('%c[Text Processing] 开始处理语言:', 'color: #9C27B0', language);
-    await processLanguageText(element, text, settings, language);
+    await processLanguageText(element, text, language);
 }
 
 // 统一处理不同语言的文本
-async function processLanguageText(element, text, settings, language) {
+async function processLanguageText(element, text, language) {
     const logColors = {
         english: '#673AB7',
         japanese: '#E91E63', 
@@ -86,8 +94,8 @@ async function processLanguageText(element, text, settings, language) {
     console.debug(`%c[${language} Processing] 处理${language}文本:`, `color: ${logColors[language]}`, text);
     
     const container = document.createElement('span');
-    container.className = 'pronunciation-container pronunciation-processed';
-    container.setAttribute('data-language', language);
+    container.className = 'pronunciation-container';
+    container.dataset.language = language;
 
     // 根据语言选择分词方式
     let words;
@@ -106,7 +114,7 @@ async function processLanguageText(element, text, settings, language) {
 
     // 获取发音设置
     const accentType = language === 'english' ? 
-        (settings.accent.english.uk ? 'uk' : 'us') : 
+        (globalSettings.accent.english.uk ? 'uk' : 'us') : 
         'standard';
 
     // 处理每个单词
@@ -121,7 +129,7 @@ async function processLanguageText(element, text, settings, language) {
             console.warn(`%c[${language} Processing] 未找到发音:`, `color: ${logColors[language]}`, word);
         }
         
-        const wordSpan = createWordSpan(word, pronunciation);
+        const wordSpan = createWordSpan(word, language, accentType, pronunciation);
         container.appendChild(wordSpan);
         
         // 英语单词间添加空格
@@ -130,7 +138,10 @@ async function processLanguageText(element, text, settings, language) {
         }
     }
 
-    element.replaceWith(container);
+    // element.replaceWith(container);
+    // element.innerHTML = '';
+    // element.appendChild(container);
+    element.innerHTML = container.innerHTML;
     console.debug(`%c[${language} Processing] ${language}文本处理完成`, `color: ${logColors[language]}`);
 }
 

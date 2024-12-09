@@ -1,4 +1,4 @@
-function createWordSpan(word, pronunciation) {
+function createWordSpan(word, language, accent, pronunciation) {
     console.debug('%c[DOM] 创建单词span:', 'color: #607D8B', word, pronunciation);
     const span = document.createElement('span');
     span.className = 'word-container';
@@ -6,6 +6,9 @@ function createWordSpan(word, pronunciation) {
     if (pronunciation) {
         const tooltip = document.createElement('span');
         tooltip.className = 'pronunciation-tooltip';
+        tooltip.dataset.language = language;
+        tooltip.dataset.accent = accent;
+        tooltip.dataset.origin = word;
         
         if (globalSettings.enablePhoneticColor) {
             // 直接逐字符匹配音标

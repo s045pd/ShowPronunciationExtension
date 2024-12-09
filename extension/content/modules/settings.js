@@ -2,7 +2,8 @@
 const Language = Object.freeze({
     english: 'english',
     japanese: 'japanese', 
-    korean: 'korean'
+    korean: 'korean',
+    chinese: 'chinese'
 });
 
 
@@ -10,6 +11,9 @@ const Accent = Object.freeze({
     english: {
         us: 'us',
         uk: 'uk'
+    },
+    chinese: {
+        standard: 'standard'
     }
 });
 
@@ -19,12 +23,14 @@ const defaultSettings = {
     enabledLanguages: {
         english: true,
         japanese: true,
-        korean: true
+        korean: true,
+        chinese: true
     },
     accent: {
-        english: 'us',
+        english: 'uk',
         japanese: 'standard',
-        korean: 'standard'
+        korean: 'standard',
+        chinese: 'standard'
     },
     selection: {
         enabled: true,

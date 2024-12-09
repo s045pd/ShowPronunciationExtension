@@ -3,12 +3,9 @@ class PronunciationService {
         console.log('%c[Service] 初始化发音服务', 'color: #4CAF50');
         this.pronunciationData = {
             english: null,
-            japanese: {
-                standard: null
-            },
-            korean: {
-                standard: null
-            }
+            japanese: null,
+            korean: null,
+            chinese: null
         };
     }
 
@@ -16,12 +13,17 @@ class PronunciationService {
     async loadPronunciationData() {
         console.log('%c[Service] 开始加载发音数据', 'color: #4CAF50');
         try {
-            // 加载英语数据（新格式）
-            this.pronunciationData.english = await this.fetchJson('data/en/data.json');
-            
-            // 保持其他语言的加载方式不变
-            this.pronunciationData.japanese.standard = await this.fetchJson('data/ja/ipa.json');
-            this.pronunciationData.korean.standard = await this.fetchJson('data/ko/ipa.json');
+            // 使用循环加载所有语言数据
+            const languagePaths = {
+                english: 'data/en/data.json',
+                japanese: 'data/ja/data.json', 
+                korean: 'data/ko/data.json',
+                chinese: 'data/cn/data.json'
+            };
+
+            for (const [language, path] of Object.entries(languagePaths)) {
+                this.pronunciationData[language] = await this.fetchJson(path);
+            }
             
             console.log('%c[Service] 发音数据加载完成', 'color: #4CAF50');
         } catch (error) {
@@ -49,9 +51,9 @@ class PronunciationService {
 
     // 获取指定单词的发音
     getPronunciation(word, language, accentType) {
-        console.debug('%c[Service] 获取发音:', 'color: #4CAF50', word, language, accentType);
+        console.debug('%c[Service] 获取发音:', 'color: #4CAF50',`${word} -> ${language.toUpperCase()}[${accentType}]`);
         try {
-            if (language === 'english') {
+            if (language !== 'chinese') {
                 // 处理英语发音（新格式）
                 const wordData = this.pronunciationData.english?.[word];
                 if (!wordData) {
@@ -69,7 +71,7 @@ class PronunciationService {
                 return accentData.alpha;  // 返回音标
             } else {
                 // 其他语言保持原有处理方式
-                const data = this.pronunciationData[language]?.standard;
+                const data = this.pronunciationData[language];
                 if (!data) {
                     console.warn('%c[Service] 未找到对应语言的发音数据', 'color: #4CAF50');
                     return null;

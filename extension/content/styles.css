@@ -1,70 +1,46 @@
-
-
-.pronunciation-audio-button {
-    display: inline-block;
-    margin-left: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #666;
-    vertical-align: middle;
-}
-
-.pronunciation-audio-button:hover {
-    color: #4CAF50;
-}
-
-
+/* 单词容器 */
 .pronunciation-container {
-    line-height: 2.4;
+    line-height: 2;
     transition: opacity 0.3s ease;
     opacity: 1;
-    display: inline-block;
+    display: inline;
 }
+/* 单词与发音混合容器 */
 .word-container {
     display: inline-block;
     position: relative;
     text-align: center;
-    margin: 0 2px;
 }
+/* 发音提示 */
 .pronunciation-tooltip {
     position: absolute;
     background: transparent;
-    color: #666;
+    color: #40a2d7;
     font-size: 0.7em;
     font-family: Arial, sans-serif;
     line-height: 1;
-    top: -0.3em;
+    top: -0.2em;
     left: 50%;
     transform: translateX(-50%);
     white-space: nowrap;
     letter-spacing: -0.2px;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    pointer-events: none;
 }
+/* 原始单词 */
 .word-text {
     display: inline-block;
 }
-.pronunciation-processed {
-    background-color: rgba(255, 255, 255, 0.05);
-}
-.selected-text {
-    background-color: rgba(255, 0, 0, 0.2);
-}
-.selected-text-wrapper {
-    display: inline;
-    background-color: rgba(255, 255, 255, 0.05);
-}
-.pronunciation-tooltip span {
-    display: inline-block;
-    margin: 0 0.2px;
-    line-height: 1.1;
-}
+/* 隐藏内容 */
 .pronunciation-hidden {
     opacity: 0 !important;
     pointer-events: none;
     position: relative;
-}
-.pronunciation-hidden .pronunciation-tooltip {
     display: none !important;
 }
-.pronunciation-hidden .word-text {
-    opacity: 0.5;
+.pronunciation-hidden * {
+    display: none !important;
 }

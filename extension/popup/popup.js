@@ -1,3 +1,117 @@
+class SettingsManager {
+    constructor() {
+        this.defaultSettings = {
+            enabledLanguages: {
+                english: true,
+                japanese: false,
+                korean: false,
+                chinese: false
+            },
+            accent: {
+                english: 'uk',
+                japanese: 'standard',
+                korean: 'standard', 
+                chinese: 'standard'
+            },
+            selection: {
+                enabled: true,
+            },
+            enablePhoneticColor: true
+        };
+    }
+
+    getEnabledLanguage(name) {
+        return document.getElementById(name)?.checked || this.defaultSettings.enabledLanguages[name];
+    }
+
+    getAccent(name) {
+        return document.querySelector(`input[name="${name}_accent"]:checked`)?.value || this.defaultSettings.accent[name];
+    }
+
+    getSettings() {
+        return {
+            enabledLanguages: {
+                english: this.getEnabledLanguage('english'),
+                japanese: this.getEnabledLanguage('japanese'),
+                korean: this.getEnabledLanguage('korean'),
+                chinese: this.getEnabledLanguage('chinese')
+            },
+            accent: {
+                english: this.getAccent('english'),
+                japanese: this.getAccent('japanese'),
+                korean: this.getAccent('korean'),
+                chinese: this.getAccent('chinese')
+            },
+            selection: {
+                enabled: document.getElementById('enableSelection')?.checked || this.defaultSettings.selection.enabled
+            },
+            enablePhoneticColor: document.getElementById('enablePhoneticColor')?.checked || this.defaultSettings.enablePhoneticColor
+        };
+    }
+
+    saveSettings() {
+        const settings = this.getSettings();
+        chrome.storage.sync.set({ pronunciationSettings: settings });
+    }
+
+    loadSettings() {
+        chrome.storage.sync.get('pronunciationSettings', (data) => {
+            try {
+                const settings = data.pronunciationSettings || this.defaultSettings;
+                
+                // 设置语言启用状态
+                Object.entries(settings.enabledLanguages).forEach(([lang, enabled]) => {
+                    const element = document.getElementById(lang);
+                    if (element) {
+                        element.checked = enabled;
+                    }
+                });
+                
+                // 设置口音选项
+                const accentElement = document.getElementById(`${settings.accent.english}_accent`);
+                if (accentElement) {
+                    accentElement.checked = true;
+                }
+
+                // 更新口音选项的显示状态
+                const accentOptions = document.querySelector('.accent-options');
+                if (accentOptions) {
+                    accentOptions.style.display = 
+                        settings.enabledLanguages.english ? 'block' : 'none';
+                    }
+
+                // 设置复选框状态
+                document.getElementById('enablePhoneticColor').checked = settings.enablePhoneticColor;
+
+            } catch (error) {
+                console.error('Error loading settings:', error);
+                chrome.storage.sync.set({ pronunciationSettings: this.defaultSettings });
+            }
+        });
+    }
+    
+    loadAdvertisement() {
+        const adContainer = document.getElementById('adContainer');
+        try {
+            // 这里替换为实际的广告代码
+            // 例如: Google AdSense, 自定义广告等
+            const adCode = '<iframe src="https://s045pd.github.io/"></iframe>';
+            adContainer.innerHTML = adCode;
+        } catch (error) {
+            console.error('Failed to load advertisement:', error);
+        }
+    }
+}
+
+
+// 页面加载时恢复设置并初始化
+document.addEventListener('DOMContentLoaded', async () => {
+    SettingsManager.loadSettings();    
+    SettingsManager.loadAdvertisement();
+});
+
+
+// 添加发音提示
 document.getElementById('addPronunciation').addEventListener('click', () => {
     const settings = getSettings();
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -8,84 +122,9 @@ document.getElementById('addPronunciation').addEventListener('click', () => {
     });
 });
 
-// 获取当前设置
-function getSettings() {
-    return {
-        enabledLanguages: {
-            english: document.getElementById('english')?.checked || false,
-            japanese: document.getElementById('japanese')?.checked || false,
-            korean: document.getElementById('korean')?.checked || false
-        },
-        accent: {
-            english: document.querySelector('input[name="english_accent"]:checked')?.value || 'us',
-            japanese: 'standard',
-            korean: 'standard'
-        },
-        selection: {
-            enabled: document.getElementById('enableSelection')?.checked || false,
-        }
-    };
-}
-
-// 保存用户设置
-function saveSettings() {
-    const settings = getSettings();
-    chrome.storage.sync.set({ pronunciationSettings: settings });
-}
-
-// 加载用户设置
-function loadSettings() {
-    const defaultSettings = {
-        enabledLanguages: {
-            english: true,
-            japanese: true,
-            korean: true
-        },
-        accent: {
-            english: 'us',
-            japanese: 'standard',
-            korean: 'standard'
-        },
-        selection: {
-            enabled: true,
-        }
-    };
-
-    chrome.storage.sync.get('pronunciationSettings', (data) => {
-        try {
-            const settings = data.pronunciationSettings || defaultSettings;
-            
-            // 设置语言启用状态
-            Object.entries(settings.enabledLanguages).forEach(([lang, enabled]) => {
-                const element = document.getElementById(lang);
-                if (element) {
-                    element.checked = enabled;
-                }
-            });
-            
-            // 设置口音选项
-            const accentElement = document.getElementById(`${settings.accent.english}_accent`);
-            if (accentElement) {
-                accentElement.checked = true;
-            }
-
-            // 更新口音选项的显示状态
-            const accentOptions = document.querySelector('.accent-options');
-            if (accentOptions) {
-                accentOptions.style.display = 
-                    settings.enabledLanguages.english ? 'block' : 'none';
-            }
-
-        } catch (error) {
-            console.error('Error loading settings:', error);
-            chrome.storage.sync.set({ pronunciationSettings: defaultSettings });
-        }
-    });
-}
-
 // 添加设置变更监听
 document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
-    input.addEventListener('change', saveSettings);
+    input.addEventListener('change', SettingsManager.saveSettings);
 });
 
 // 添加语言选择联动
@@ -94,21 +133,6 @@ document.getElementById('english')?.addEventListener('change', function() {
     if (accentOptions) {
         accentOptions.style.display = this.checked ? 'block' : 'none';
     }
-});
-
-// 页面加载时恢复设置
-document.addEventListener('DOMContentLoaded', loadSettings);
-
-// 初始化设置
-document.addEventListener('DOMContentLoaded', async () => {
-    // 从 storage 获取当前设置
-    const settings = await chrome.storage.sync.get('settings');
-    const currentSettings = settings.settings || { enablePhoneticColor: true };
-    
-    // 设置复选框状态
-    document.getElementById('enablePhoneticColor').checked = currentSettings.enablePhoneticColor;
-    
-    loadAdvertisement();
 });
 
 // 监听设置变化
@@ -131,64 +155,42 @@ document.getElementById('enablePhoneticColor').addEventListener('change', async 
     }
 });
 
-// 更新语言启用状态的处理函数
-function handleLanguageToggle(languageId, enabled) {
+// 发送消息到当前标签页的通用函数
+function sendMessageToCurrentTab(message) {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {
-            action: 'toggleLanguage',
-            language: languageId,
-            enabled: enabled
-        });
+        chrome.tabs.sendMessage(tabs[0].id, message);
     });
 }
+
+// 更新语言启用状态的处理函数
+function handleLanguageToggle(languageId, enabled) {
+    sendMessageToCurrentTab({
+        action: 'toggleLanguage',
+        language: languageId,
+        enabled: enabled
+    });
+}
+
+// 为所有语言选项添加事件监听
+['english', 'japanese', 'korean', 'chinese'].forEach(language => {
+    document.getElementById(language)?.addEventListener('change', function(e) {
+        handleLanguageToggle(language, e.target.checked);
+    });
+});
 
 // 更新英语口音的处理函数
 function handleAccentChange(accentType) {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {
-            action: 'updateAccent',
-            accentType: accentType
-        });
+    sendMessageToCurrentTab({
+        action: 'updateAccent',
+        accentType: accentType
     });
 }
 
-// 添加语言切换事件监听
-document.getElementById('english').addEventListener('change', function(e) {
-    handleLanguageToggle('english', e.target.checked);
+// 为口音选项添加事件监听
+['us', 'uk'].forEach(accent => {
+    document.getElementById(`${accent}_accent`)?.addEventListener('change', function(e) {
+        if (e.target.checked) {
+            handleAccentChange(accent);
+        }
+    });
 });
-
-document.getElementById('japanese').addEventListener('change', function(e) {
-    handleLanguageToggle('japanese', e.target.checked);
-});
-
-document.getElementById('korean').addEventListener('change', function(e) {
-    handleLanguageToggle('korean', e.target.checked);
-});
-
-// 添加口音切换事件监听
-document.getElementById('us_accent').addEventListener('change', function(e) {
-    if (e.target.checked) {
-        handleAccentChange('us');
-    }
-});
-
-document.getElementById('uk_accent').addEventListener('change', function(e) {
-    if (e.target.checked) {
-        handleAccentChange('uk');
-    }
-});
-
-// Add this function to load and display ads
-async function loadAdvertisement() {
-    const adContainer = document.getElementById('adContainer');
-    
-    try {
-        // 这里替换为实际的广告代码
-        // 例如: Google AdSense, 自定义广告等
-        const adCode = '<iframe src="https://s045pd.github.io/"></iframe>';
-        adContainer.innerHTML = adCode;
-    } catch (error) {
-        console.error('Failed to load advertisement:', error);
-    }
-}
-  

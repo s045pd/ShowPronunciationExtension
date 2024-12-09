@@ -16,7 +16,7 @@ async function handleAccentChange(request) {
         );
         
         if (pronunciation) {
-            const newContainer = createWordSpan(wordText, pronunciation);
+            const newContainer = createWordSpan(wordText, 'english', request.accentType, pronunciation);
             // 保持语言标记
             newContainer.setAttribute('data-language', 'english');
             container.replaceWith(newContainer);
@@ -38,9 +38,30 @@ function handlePhoneticColorUpdate(request) {
             const pronunciation = tooltip.textContent;
             
             // 重新创建带有新设置的音标显示
-            const newContainer = createWordSpan(word, pronunciation);
+            const newContainer = createWordSpan(word, 'english', request.accentType, pronunciation);
             container.replaceWith(newContainer);
         }
     });
 }
 
+// 处理语言切换
+function handleLanguageUpdate(request) {
+    console.debug('%c[Settings] 切换语言可见性:', 'color: #FF5722', request.language, request.enabled);
+    
+    // 更新全局设置
+    globalSettings.enabledLanguages[request.language] = request.enabled;
+    
+    // 查找所有相应语言的容器
+    const containers = document.querySelectorAll(`.pronunciation-tooltip[data-language="${request.language}"]`);
+    console.debug('%c[Settings] 找到容器数量:', 'color: #FF5722', containers.length);
+    
+    containers.forEach(container => {
+        if (request.enabled) {
+            container.classList.remove('pronunciation-hidden');
+            console.debug('%c[Settings] 显示容器:', 'color: #FF5722', container);
+        } else {
+            container.classList.add('pronunciation-hidden');
+            console.debug('%c[Settings] 隐藏容器:', 'color: #FF5722', container);
+        }
+    });
+}

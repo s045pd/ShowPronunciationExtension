@@ -80,22 +80,42 @@ tests/ # 测试目录
 ### 数据来源
 
 #### 英语发音数据
-- 来源：[莱比锡语料库集合](https://wortschatz.uni-leipzig.de/en/download/English)
-- 数据集：英语新闻语料库（2012）
-- 格式：带IPA转写的词频列表
-- 处理：使用gather.ipynb清理和标准化
+
+
+| 数据来源   | 说明 |
+|----------|--------|
+| [莱比锡语料库集合](https://wortschatz.uni-leipzig.de/en/download/English) | 英语新闻语料库（2012） |
+| [Cambridge Dictionary](https://dictionary.cambridge.org/) | 英式英语词典 |
+| [Merriam-Webster](https://www.merriam-webster.com/) | 美式英语词典 |
+
 
 #### 中文数据
-- 拼音数据来自CC-CEDICT
-- 包含声调标记和简繁体字映射
+
+| 数据来源   |类型 |说明 |
+|----------|--------|----|
+| [VoiceDic](https://md.voicedic.com/) |API| 发音查询接口 |
+| [zh.voicedic.com](https://zh.voicedic.com/) |API| 方言查询接口 |
+| [汉典](https://www.zdic.net/) | API|汉字-拼音对照表 |
+| [国家语委语料库](http://corpus.zhonghuayuwen.org/) | API|现代汉语语料库 |
+| [chinese_pinyin](https://github.com/flyerhzm/chinese_pinyin/blob/master/data/pinyin-utf8.date) | 文件|汉字-拼音对照表 |
+| [chinese-xinhua](https://raw.githubusercontent.com/pwxcoo/chinese-xinhua/refs/heads/master/data/ci.csv) | 文件|成语-拼音对照表 |
+
+
+
+
+
+
 
 #### 日语数据
-- 假名读音基于官方常用汉字表
-- 罗马字转换遵循修改版平文式
+
+| 数据来源   | 说明 |
+|----------|--------|
+
 
 #### 韩语数据
-- 谚文发音规则来自韩国国立国语院
-- 罗马化遵循韩语罗马字新转写法
+
+| 数据来源   | 说明 |
+|----------|--------|
 
 
 

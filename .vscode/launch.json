@@ -20,7 +20,7 @@
             "name": "Chinese Test",
             "type": "chrome",
             "request": "launch",
-            "url":"https://zh.wikipedia.org/wiki/Wikipedia:%E5%85%B3%E4%BA%8E",
+            "url":"https://baike.baidu.com/item/%E4%B8%AD%E5%9B%BD/1122445",
             "runtimeArgs": [
                 "--load-extension=${workspaceFolder}/extension",
                 "--disable-extensions-except=${workspaceFolder}/extension",
@@ -28,6 +28,7 @@
             ],
             "sourceMaps": true
         },
+
         {
             "name":"Korean Test",
             "type": "chrome",

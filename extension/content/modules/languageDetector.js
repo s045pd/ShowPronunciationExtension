@@ -1,7 +1,7 @@
 // 语言检测模式定义
 const languagePatterns = {
     english: /[a-zA-Z]+/,
-    mandarin: /[\u4e00-\u9fff]/,
+    chinese: /[\u4e00-\u9fff]/,
     hangul: /[\uAC00-\uD7A3]/,
     japanese: /[\u3040-\u30FF]/,
 };

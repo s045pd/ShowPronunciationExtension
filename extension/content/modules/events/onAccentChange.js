@@ -1,21 +1,24 @@
-// 处理语言切换
-function handleLanguageToggle(request) {
-    console.debug('%c[Settings] 切换语言可见性:', 'color: #FF5722', request.language, request.enabled);
-    
-    // 更新全局设置
-    globalSettings.enabledLanguages[request.language] = request.enabled;
-    
-    // 查找所有相应语言的容器
-    const containers = document.querySelectorAll(`.pronunciation-container[data-language="${request.language}"]`);
-    console.debug('%c[Settings] 找到容器数量:', 'color: #FF5722', containers.length);
-    
-    containers.forEach(container => {
-        if (request.enabled) {
-            container.classList.remove('pronunciation-hidden');
-            console.debug('%c[Settings] 显示容器:', 'color: #FF5722', container);
-        } else {
-            container.classList.add('pronunciation-hidden');
-            console.debug('%c[Settings] 隐藏容器:', 'color: #FF5722', container);
+
+
+
+function handleAccentUpdate(request) {
+    console.debug('%c[Settings] 更新英语口音:', 'color: #FF5722', request.accentType);
+    globalSettings.accent.english = request.accentType;
+    // Find all elements with phonetic transcriptions and update them
+    const phoneticElements = document.querySelectorAll('[data-accent]');
+    phoneticElements.forEach(async (element) => {
+        console.debug('%c[Settings] 更新口音:', 'color: #FF5722', element);
+        const word = element.dataset.origin;
+        if (word) {
+            try {
+                // Fetch new phonetic based on updated accent
+                const newPhonetic = await pronunciationService.getPronunciation(word, 'english', request.accentType);
+                if (newPhonetic) {
+                    element.textContent = newPhonetic;
+                }
+            } catch (error) {
+                console.error(`Failed to update phonetic for word: ${word}`, error);
+            }
         }
     });
 }

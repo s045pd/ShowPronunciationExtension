@@ -29,11 +29,13 @@ function initializeEventListeners() {
 // 添加消息监听器
 function initializeMessageListener() {
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+
+        // 动作
         const actionHandlers = {
             addPronunciation: handleAddPronunciation,
-            updatePhoneticColor: handleUpdatePhoneticColor,
-            toggleLanguage: handleToggleLanguage,
-            updateAccent: handleUpdateAccent
+            updatePhoneticColor: handlePhoneticColorUpdate,
+            toggleLanguage: handleLanguageUpdate,
+            updateAccent: handleAccentUpdate
         };
 
         const handler = actionHandlers[request.action];

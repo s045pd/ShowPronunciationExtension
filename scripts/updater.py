@@ -7,7 +7,7 @@ from gather import gather_pronunciation
 # Language detection patterns
 LANGUAGE_PATTERNS = {
     "english": re.compile(r"^[a-zA-Z\s.,!?\'\"()-]+$"),
-    "mandarin": re.compile(r"[\u4e00-\u9fff]"),
+    "chinese": re.compile(r"[\u4e00-\u9fff]"),
     "hangul": re.compile(r"[\uAC00-\uD7A3]"),
     "japanese": re.compile(r"[\u3040-\u30FF]"),
 }
