@@ -15,6 +15,14 @@
 > Our Goal：make you sound like a native, even further.
 
 
+<p align="center">
+  <video width="100%" controls>
+    <source src="media/usage.mov" type="video/quicktime">
+    Your browser does not support the video tag.
+  </video>
+</p>
+
+
 
 ## 功能
 
